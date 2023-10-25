@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+        <meta name="description" content="" />
+        <meta name="author" content="" />
+        <title>Gaurav - Links</title>
+        <!-- Favicon-->
+        <link rel="icon" type="image/x-icon" href="../static/assets/favicon.ico" />
+        <link href="../static/css/styles.css" rel="stylesheet" />
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+        <style>
+            .container {
+                display: flex;
+                justify-content: space-between;
+            }
+            
+            .text-box {
+                width: 48%;
+            }
+            
+            .text-box textarea {
+                width: 100%;
+                height: 50vh;
+                resize: vertical;
+                overflow: auto; /* This will add a scrollbar when needed */
+            }
+        
+            .btn-compare {
+    display: block;
+    margin: 20px auto;
+    padding: 10px 20px;
+    background-color: #00AEEF; /* Picked from the Snowflake logo's blue */
+    color: #ffffff;
+    border: none;
+    cursor: pointer;
+    border-radius: 4px; /* Slight rounding for aesthetic appeal */
+    transition: background-color 0.3s ease; /* Smooth transition for hover effect */
+    font-weight: bold; /* Making the text bold for more emphasis */
+}
+
+.btn-compare:hover {
+    background-color: #008DC9; /* A slightly darker blue for hover effect */
+}
+
+
+        </style>
+        
+
+        
+    </head>
+    <body>
+        <div class="d-flex" id="wrapper">
+            <!-- Sidebar-->
+            <div class="border-end bg-white" id="sidebar-wrapper">
+                <div class="sidebar-heading border-bottom bg-light">Teradata to Snowflake</div>
+                <div class="list-group list-group-flush">
+                    <a class="list-group-item list-group-item-action list-group-item-light p-3" href="/">Use SQL</a>
+                    <a class="list-group-item list-group-item-action list-group-item-light p-3" href="/database">Use Database</a>
+                 
+                </div>
+            </div>
+            <!-- Page content wrapper-->    
+            <div id="page-content-wrapper">
+                <!-- Top navigation-->
+                <nav class="navbar navbar-expand-lg navbar-light bg-light border-bottom">
+                    <div class="container-fluid">
+                        
+                         
+                            <ul class="navbar-nav ms-auto mt-2 mt-lg-0">
+                                <li class="nav-item active"><a class="nav-link" href="">
+                                Home
+                                </a></li>
+                            
+                            </ul>
+                         
+                    </div>
+                </nav>
+                <!-- Page content-->
+
+                <div class="container">
+                    <div class="dropdown-box">
+                        <label for="dropdown1">Select Option 1</label>
+                        <select id="dropdown1">
+                            <!-- Add options here for the first dropdown -->
+                            <option value="option1">Option 1</option>
+                            <option value="option2">Option 2</option>
+                            <!-- Add more options as needed -->
+                        </select>
+                    </div>
+                
+                    <div class="dropdown-box">
+                        <label for="dropdown2">Select Option 2</label>
+                        <select id="dropdown2">
+                            <!-- Add options here for the second dropdown -->
+                            <option value="option3">Option 3</option>
+                            <option value="option4">Option 4</option>
+                            <!-- Add more options as needed -->
+                        </select>
+                    </div>
+                
+                    <div class="text-box">
+                        <label for="text2">Output DDL</label>
+                        <textarea id="text2"></textarea>
+                    </div>
+                </div>
+                
+                
+                <button class="btn-compare">Generate!</button>
+              
+            </div>
+        </div>
+        <script>
+            document.querySelector(".btn-compare").addEventListener("click", function() {
+                // Get the input DDL from the textarea
+                var inputDDL = document.getElementById("text1").value;
+                console.log(inputDDL)
+        
+          
+                // Make an AJAX request to the Flask backend
+                $.ajax({
+                    type: 'POST',
+                    url: '/generate',
+                    data: { input_ddl: inputDDL },
+                    dataType: "json",
+                    encode: true
+                })
+                .done(function(response) {
+                    // Update the output DDL textarea with the result
+                    document.getElementById("text2").value = response.output_ddl;
+
+                    console.log(response.output_ddl)
+          
+                })
+                .fail(function() {
+                    // Handle AJAX request failure here
+                    console.log("AJAX request failed");
+                });
+            });
+        </script>
+        
+        
+
+
+    </body>
+</html>
