@@ -12,22 +12,46 @@
         <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
         <style>
+            body {
+                font-family: Arial, sans-serif;
+            }
+        
             .container {
                 display: flex;
                 justify-content: space-between;
             }
-            
-            .text-box {
-                width: 48%;
+        
+            .menu-container {
+                width: 30%;
+                padding: 20px;
+                background-color: #fff;
+                box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+                border-radius: 5px;
             }
-            
-            .text-box textarea {
+        
+            .output-container {
+                width: 48%; /* Adjusted width to match .text-box */
+               
+               
+               
+               
+            }
+        
+            select {
+                width: 100%;
+                padding: 10px;
+                margin-bottom: 20px;
+            }
+        
+            /* CSS for textarea element */
+            textarea {
                 width: 100%;
                 height: 50vh;
                 resize: vertical;
                 overflow: auto; /* This will add a scrollbar when needed */
+               
             }
-        
+
             .btn-compare {
     display: block;
     margin: 20px auto;
@@ -46,7 +70,9 @@
 }
 
 
+
         </style>
+        
         
 
         
@@ -80,39 +106,117 @@
                 </nav>
                 <!-- Page content-->
 
+
                 <div class="container">
-                    <div class="dropdown-box">
-                        <label for="dropdown1">Select Option 1</label>
-                        <select id="dropdown1">
-                            <!-- Add options here for the first dropdown -->
-                            <option value="option1">Option 1</option>
-                            <option value="option2">Option 2</option>
-                            <!-- Add more options as needed -->
+                    <div class="menu-container">
+                        <label for="menu1">Database</label>
+                         
+                        <select name="menu1" id="menu1">
+                             
+                        </select>
+                    
+                        <label for="menu2">Table</label>
+                        <select name="menu2" id="menu2">
+                             
                         </select>
                     </div>
+                    
                 
-                    <div class="dropdown-box">
-                        <label for="dropdown2">Select Option 2</label>
-                        <select id="dropdown2">
-                            <!-- Add options here for the second dropdown -->
-                            <option value="option3">Option 3</option>
-                            <option value="option4">Option 4</option>
-                            <!-- Add more options as needed -->
-                        </select>
-                    </div>
-                
-                    <div class="text-box">
+                    <div class="output-container">
                         <label for="text2">Output DDL</label>
-                        <textarea id="text2"></textarea>
+                        <textarea name="output" id="output" rows="10"></textarea>
                     </div>
                 </div>
-                
                 
                 <button class="btn-compare">Generate!</button>
               
             </div>
         </div>
         <script>
+
+document.addEventListener("DOMContentLoaded", function () {
+
+ 
+        // Get references to the select elements
+        var menu1 = document.getElementById('menu1');
+        var menu2 = document.getElementById('menu2');
+        
+        // Function to populate menu1 with data from the /getdb API endpoint
+       
+
+        function populateMenu1() {
+            $.ajax({
+                url: '/getdb', // Replace with the actual URL of your API endpoint
+                type: 'GET',
+                dataType: 'json',
+                success: function (response) {
+                    // Clear existing options
+
+                    var data = response.db_list;
+                    menu1.options.length = 0;
+
+                    // Add a default "Select Database" option
+                    var defaultOption = document.createElement('option');
+                    defaultOption.value = '';
+                    defaultOption.text = 'Select Database';
+                    menu1.appendChild(defaultOption);
+
+                    
+
+                    // Add database options from the API response
+                    for (var i = 0; i < data.length; i++) {
+                        var option = document.createElement('option');
+                        option.value = data[i];
+                        option.text = data[i];
+                        console.log(data[i])
+                        menu1.appendChild(option);
+                    }
+                },
+                error: function () {
+                    alert('Failed to fetch database list');
+                }
+            });
+        }
+    
+   
+
+        // Function to populate menu2 with data from the /getdb API endpoint
+        function populateMenu2() {
+            $.ajax({
+                url: '/gettbl', // Replace with the actual URL of your API endpoint
+                type: 'GET',
+                dataType: 'json',
+                success: function (response) {
+                    // Clear existing options
+
+                    var data = response.db_list;
+                    menu2.options.length = 0;
+
+                    // Add a default "Select Table" option
+                    var defaultOption = document.createElement('option');
+                    defaultOption.value = '';
+                    defaultOption.text = 'Select Table';
+                    menu2.appendChild(defaultOption);
+
+                    // Add table options from the API response
+                    for (var i = 0; i < data.length; i++) {
+                        var option = document.createElement('option');
+                        option.value = data[i];
+                        option.text = data[i];
+                        menu2.appendChild(option);
+                    }
+                },
+                error: function () {
+                    alert('Failed to fetch Tables list');
+                }
+            });
+        }
+
+        // Call the populateMenu1 and populateMenu2 functions initially to load options
+        populateMenu1();
+        populateMenu2();
+
+
             document.querySelector(".btn-compare").addEventListener("click", function() {
                 // Get the input DDL from the textarea
                 var inputDDL = document.getElementById("text1").value;
@@ -139,6 +243,9 @@
                     console.log("AJAX request failed");
                 });
             });
+
+
+        });
         </script>
         
         
