@@ -28,6 +28,25 @@ def process_ddl(input_ddl):
     # You can replace this with your actual processing code
     return "Processed DDL: " + input_ddl
 
+
+
+@app.route('/getdb', methods=['GET'])
+def generate_db():
+    db_list = ['db1', 'db2', 'db3']
+
+    # Get the databases
+    return jsonify({"db_list": db_list})
+
+
+@app.route('/gettbl', methods=['GET'])
+def generate_tbl():
+    # Get the tables  
+    db_list = ['db1', 'db2', 'db3']
+    # Get the databases
+    return jsonify({"db_list": db_list})      
+
+
+
 if __name__ == '__main__':
     
 
