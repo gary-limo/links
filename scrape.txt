@@ -1,0 +1,222 @@
+from requests import Session 
+
+from bs4 import BeautifulSoup as bs 
+
+from selenium.webdriver.chrome.options import Options 
+
+from selenium import webdriver 
+
+import webbrowser 
+
+from telegram.ext import Updater, InlineQueryHandler, CommandHandler 
+
+import requests 
+
+import re 
+
+from selenium.webdriver.common.by import By 
+
+from selenium.common.exceptions import NoSuchElementException 
+
+import time 
+
+import os 
+
+ 
+ 
+
+chrome_options = Options() 
+
+chrome_options.add_argument("--headless") 
+
+chrome_options.add_argument('--no-sandbox') 
+
+chrome_options.add_argument('--incognito') 
+
+driver = webdriver.Chrome('/usr/bin/chromedriver', options=chrome_options) 
+
+ 
+ 
+
+TELEGRAM_BOT_TOKEN = '5231539325:AAF2PrzT365sTJzK16aqOy4aGUF_6ZyUpG0' 
+
+TELEGRAM_CHAT_ID = '1700670310' 
+
+PHOTO_PATH = 'day_pass.png' 
+
+ 
+ 
+
+if os.path.exists(PHOTO_PATH): 
+
+os.remove(PHOTO_PATH) 
+
+ 
+ 
+ 
+
+""" 
+
+Visit The Website and continue as non-employee : Page 1  
+
+""" 
+
+ 
+driver.get('https://covid-trv.app/') 
+
+ 
+ 
+
+driver.find_element(by=By.XPATH, value="//button[normalize-space()='Continue as Non-employee']").click() 
+
+ 
+ 
+ 
+
+""" 
+
+New Page  
+
+ 
+
+Enter login details .  
+
+ 
+If login screen is not prompted , skip the login and go to questionaire 
+
+ 
+ 
+
+""" 
+
+ 
+ 
+
+try: 
+
+if driver.find_element(by=By.XPATH, value ="//input[@id='username']"): 
+
+username = driver.find_element(by=By.XPATH, value="//input[@id='username']") 
+
+password = driver.find_element(by=By.XPATH, value="//input[@id='password']") 
+
+username.send_keys("XXXXXXXX") 
+
+password.send_keys("XXXXXXXX") 
+
+driver.find_element(by=By.XPATH, value="//button[@type='submit']").click() 
+
+time.sleep(10) 
+
+ 
+ 
+
+except: 
+
+print("login bypass") 
+
+ 
+ 
+ 
+
+""" 
+
+ 
+ 
+
+If the form is already submitted , then get the screenshot with valid time 
+
+ 
+ 
+
+""" 
+
+ 
+ 
+
+try: 
+
+if driver.find_element(by=By.XPATH, value="//div[normalize-space()='Valid Until']"): 
+
+time.sleep(5) 
+
+driver.get_screenshot_as_file(PHOTO_PATH) 
+
+ 
+""" 
+
+Complete the questionnaire 
+
+ 
+
+""" 
+
+ 
+
+ 
+
+ 
+
+except: 
+
+time.sleep(10) 
+
+driver.find_element(by=By.XPATH, value="//label[@for='symptoms.10-no']").click() 
+
+time.sleep(5) 
+
+driver.find_element(by=By.XPATH, value="//button[@class='tds-button--primary']").click() 
+
+time.sleep(5) 
+
+driver.find_element(by=By.XPATH, value="//label[@for='exposure.1-no']").click() 
+
+time.sleep(5) 
+
+driver.find_element(by=By.XPATH, value="//button[@class='tds-button--primary']").click() 
+
+time.sleep(5) 
+
+driver.find_element(by=By.XPATH, value="//button[@class='tds-button--primary']").click() ## Get Your Day Pass  
+
+time.sleep(5) 
+
+driver.get_screenshot_as_file(PHOTO_PATH) 
+
+ 
+ 
+ 
+
+""" 
+
+Send Day Pass Screenshot to  Telegram  
+
+ 
+
+""" 
+
+ 
+ 
+
+files = { 'photo': open(PHOTO_PATH, 'rb') } 
+
+ 
+ 
+
+message = ('https://api.telegram.org/bot'+ TELEGRAM_BOT_TOKEN + '/sendPhoto?chat_id=' + TELEGRAM_CHAT_ID ) 
+
+ 
+ 
+
+send = requests.post(message, files = files) 
+
+ 
+
+ 
+
+ 
+
+ 
+ 
+
+ 
