@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dynamic Tables</title>
+    <style>
+        .table-list {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .table-item {
+            cursor: pointer;
+            user-select: none;
+        }
+
+        .columns {
+            display: none;
+            list-style: none;
+            padding-left: 20px;
+        }
+    </style>
+</head>
+<body>
+    <ul id="tableList" class="table-list">
+        <!-- Tables will be populated here -->
+    </ul>
+
+    <script>
+        // Dummy data, replace with your own method to load data from the backend
+        const tablesData = {
+            "Table1": ["Column1", "Column2", "Column3"],
+            "Table2": ["ColumnA", "ColumnB"],
+            // ... add more tables and columns as per your data
+        };
+
+        function toggleColumns(tableId) {
+            var cols = document.getElementById(tableId);
+            cols.style.display = cols.style.display === 'none' ? 'block' : 'none';
+        }
+
+        function init() {
+            const tableList = document.getElementById("tableList");
+            for (const tableName in tablesData) {
+                let listItem = document.createElement('li');
+                listItem.className = 'table-item';
+                listItem.textContent = "+ " + tableName;
+                listItem.onclick = function() {
+                    toggleColumns(tableName);
+                };
+
+                let colList = document.createElement('ul');
+                colList.className = 'columns';
+                colList.id = tableName;
+                tablesData[tableName].forEach(colName => {
+                    let colItem = document.createElement('li');
+                    colItem.textContent = colName;
+                    colList.appendChild(colItem);
+                });
+
+                listItem.appendChild(colList);
+                tableList.appendChild(listItem);
+            }
+        }
+
+        window.onload = init;
+    </script>
+</body>
+</html>
