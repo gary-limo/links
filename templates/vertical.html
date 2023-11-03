@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Horizontal Sections with JSON Data</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            display: flex;
+            height: 100vh;
+        }
+        .section {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            border: 1px solid #ccc;
+            margin: 5px;
+            padding: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="section" id="section1">
+        <h2>Section 1</h2>
+        <div id="section1-data"></div>
+    </div>
+    <div class="section" id="section2">
+        <h2>Section 2</h2>
+        <div id="section2-data"></div>
+    </div>
+    <div class="section" id="section3">
+        <h2>Section 3</h2>
+        <div id="section3-data"></div>
+    </div>
+    <div class="section" id="section4">
+        <h2>Section 4</h2>
+        <div id="section4-data"></div>
+    </div>
+
+    <script>
+        // Function to populate each section with JSON data
+        function populateSection(sectionId, data) {
+            const sectionData = document.getElementById(sectionId + '-data');
+            sectionData.innerHTML = `<p>col1: ${data.col1}</p><p>col2: ${data.col2}</p>`;
+        }
+
+        // Hardcoded JSON data for Section 1
+        const section1Data = { col1: "Data 1-1", col2: "Data 1-2" };
+
+        // Hardcoded JSON data for Sections 2 to 4
+        const sections234Data = [
+            { col1: "Data 2-1", col2: "Data 2-2" },
+            { col1: "Data 3-1", col2: "Data 3-2" },
+            { col1: "Data 4-1", col2: "Data 4-2" }  
+        ];
+
+        // Populate Section 1 with data
+        populateSection('section1', section1Data);
+
+        // Populate Sections 2 to 4 with data
+        for (let i = 2; i <= 4; i++) {
+            const sectionId = `section${i}`;
+            populateSection(sectionId, sections234Data[i - 2]);
+        }
+    </script>
+</body>
+</html>
