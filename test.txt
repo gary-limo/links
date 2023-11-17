@@ -1,0 +1,9 @@
+SELECT 
+    c.table_name,
+    c.column_name,
+    CASE WHEN EXISTS (SELECT 1 FROM schema1.information_schema.columns WHERE table_name = c.table_name AND column_name = c.column_name) THEN 'Applied' ELSE 'Pending' END as Schema1_Status,
+    CASE WHEN EXISTS (SELECT 1 FROM schema2.information_schema.columns WHERE table_name = c.table_name AND column_name = c.column_name) THEN 'Applied' ELSE 'Pending' END as Schema2_Status,
+    CASE WHEN EXISTS (SELECT 1 FROM schema3.information_schema.columns WHERE table_name = c.table_name AND column_name = c.column_name) THEN 'Applied' ELSE 'Pending' END as Schema3_Status,
+    CASE WHEN EXISTS (SELECT 1 FROM schema4.information_schema.columns WHERE table_name = c.table_name AND column_name = c.column_name) THEN 'Applied' ELSE 'Pending' END as Schema4_Status
+FROM 
+    changes_table c;
