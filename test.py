@@ -13,8 +13,16 @@ while IFS= read -r pattern; do
 done < /path/to/patterns.txt | sort | uniq
 
 
+while IFS= read -r pattern; do
+    find /path/to/your/directory/*/ -type f -name "*.sql" -print0 | xargs -0 grep -HwiE -- "(^|[\s,])$pattern([\s,]|$)"
+done < /path/to/patterns.txt | sort | uniq
+
+
+
+
 # Define the path to the text file containing the fields to search for
 fields_file_path = 'fields.txt'
+
 
 # Read the fields from the text file
 with open(fields_file_path, 'r') as fields_file:
