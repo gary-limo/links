@@ -2,6 +2,14 @@ import os
 import re
 find / -type f -name "*.sql" -print0 | xargs -0 grep -f /path/to/patterns.txt -H
 
+
+while IFS= read -r pattern; do
+    find /path/to/your/directory/*/ -type f -name "*.sql" -print0 | xargs -0 grep -H -- "$pattern" | sed "s/^/$pattern: /"
+done < /path/to/patterns.txt
+
+
+
+
 # Define the path to the text file containing the fields to search for
 fields_file_path = 'fields.txt'
 
