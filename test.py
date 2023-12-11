@@ -1,5 +1,6 @@
 import os
 import re
+find / -type f -name "*.sql" -print0 | xargs -0 grep -f /path/to/patterns.txt -H
 
 # Define the path to the text file containing the fields to search for
 fields_file_path = 'fields.txt'
