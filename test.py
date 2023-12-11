@@ -8,6 +8,9 @@ while IFS= read -r pattern; do
 done < /path/to/patterns.txt
 
 
+while IFS= read -r pattern; do
+    find /path/to/your/directory/*/ -type f -name "*.sql" -print0 | xargs -0 grep -Hwi -- "\b$pattern\b" 
+done < /path/to/patterns.txt | sort | uniq
 
 
 # Define the path to the text file containing the fields to search for
