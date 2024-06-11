@@ -1,0 +1,63 @@
+WITH TableActivity AS (
+    SELECT
+        DatabaseName,
+        TableName,
+        CreateTimeStamp AS TableCreated,
+        LastAlterTimeStamp AS TableLastAltered,
+        LastAccessTimeStamp AS TableLastAccessed,
+        StatsTimeStamp AS StatsLastUpdated
+    FROM
+        DBC.TablesV
+    WHERE
+        TableKind = 'T'
+        AND DatabaseName = '<YourDatabaseName>'
+),
+TableSize AS (
+    SELECT
+        DatabaseName,
+        TableName,
+        CurrentPerm AS PermSpace,
+        PeakPerm AS PeakSpace
+    FROM
+        DBC.TableSize
+    WHERE
+        DatabaseName = '<YourDatabaseName>'
+),
+TableModifications AS (
+    SELECT
+        DatabaseName,
+        TableName,
+        COUNT(*) AS ModificationCount,
+        SUM(CASE WHEN StatementType = 'INSERT' THEN 1 ELSE 0 END) AS InsertCount,
+        SUM(CASE WHEN StatementType = 'UPDATE' THEN 1 ELSE 0 END) AS UpdateCount,
+        SUM(CASE WHEN StatementType = 'DELETE' THEN 1 ELSE 0 END) AS DeleteCount
+    FROM
+        DBC.QryLog
+    WHERE
+        DatabaseName = '<YourDatabaseName>'
+        AND TableName IN (SELECT TableName FROM DBC.TablesV WHERE TableKind = 'T' AND DatabaseName = '<YourDatabaseName>')
+        AND QueryBand LIKE '%Utility=FLOAD%' -- Filter for FastLoad or similar utilities
+        AND StartTime >= DATE '2024-01-01' -- Adjust date range as needed
+    GROUP BY
+        DatabaseName,
+        TableName
+)
+SELECT
+    TA.DatabaseName,
+    TA.TableName,
+    TA.TableCreated,
+    TA.TableLastAltered,
+    TA.TableLastAccessed,
+    TA.StatsLastUpdated,
+    TS.PermSpace,
+    TS.PeakSpace,
+    TM.ModificationCount,
+    TM.InsertCount,
+    TM.UpdateCount,
+    TM.DeleteCount
+FROM
+    TableActivity TA
+    LEFT JOIN TableSize TS ON TA.DatabaseName = TS.DatabaseName AND TA.TableName = TS.TableName
+    LEFT JOIN TableModifications TM ON TA.DatabaseName = TM.DatabaseName AND TA.TableName = TM.TableName
+ORDER BY
+    TA.TableName;
