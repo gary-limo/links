@@ -18,3 +18,29 @@ for _, row in grouped.iterrows():
         file.write(f"ID: {id_value}\nSum of Values in Column D: {sum_value}")
 
 print("Files created successfully.")
+
+
+#!/bin/bash
+
+# Define the directory to scan
+DIR="/path/to/your/location"
+
+# Define the variable to hold file names with accented characters
+files_with_accents=""
+
+# Find files with French accented characters
+for file in $(grep -l '[éèêëàâäîïôöûüçÉÈÊËÀÂÄÎÏÔÖÛÜÇ]' "$DIR"/*); do
+    # Add the file to the list
+    files_with_accents+="$file "
+done
+
+# Print the list of files
+echo "Files with accented characters: $files_with_accents"
+
+# Loop through each file and replace accented characters
+for file in $files_with_accents; do
+    sed -i 's/é/e/g;s/è/e/g;s/ê/e/g;s/ë/e/g;s/à/a/g;s/â/a/g;s/ä/a/g;s/î/i/g;s/ï/i/g;s/ô/o/g;s/ö/o/g;s/û/u/g;s/ü/u/g;s/ç/c/g;s/É/E/g;s/È/E/g;s/Ê/E/g;s/Ë/E/g;s/À/A/g;s/Â/A/g;s/Ä/A/g;s/Î/I/g;s/Ï/I/g;s/Ô/O/g;s/Ö/O/g;s/Û/U/g;s/Ü/U/g;s/Ç/C/g' "$file"
+done
+
+echo "Accented characters replaced with English characters in all files."
+
