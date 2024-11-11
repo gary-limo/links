@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rinterla Project Directory</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            background-color: #e0e0e0;
+            padding: 1rem;
+            background-image: 
+                radial-gradient(circle at 50% 50%, #333 2px, transparent 3px),
+                linear-gradient(45deg, #d3d3d3 25%, transparent 25%),
+                linear-gradient(-45deg, #d3d3d3 25%, transparent 25%),
+                linear-gradient(45deg, transparent 75%, #d3d3d3 75%),
+                linear-gradient(-45deg, transparent 75%, #d3d3d3 75%);
+            background-size: 20px 20px, 40px 40px, 40px 40px, 40px 40px, 40px 40px;
+            background-position: 0 0, 0 0, 0 0, 20px 20px, 20px 20px;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background-color: rgba(255, 255, 255, 0.95);
+            padding: 1.5rem;
+            border-radius: 10px;
+            box-shadow: 
+                0 0 0 4px #333,
+                0 0 0 8px #666,
+                0 5px 15px rgba(0,0,0,0.3);
+            border: 2px solid #999;
+        }
+
+        h1 {
+            color: #2c3e50;
+            text-align: center;
+            margin-bottom: 1.5rem;
+            font-size: 1.5rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            text-shadow: 2px 2px 0 #ccc;
+            position: relative;
+            padding: 10px 0;
+        }
+
+        h1::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 150px;
+            height: 4px;
+            background: linear-gradient(90deg, #ff0000, #00ff00, #0000ff);
+            border-radius: 2px;
+        }
+
+        .section {
+            margin-bottom: 1.5rem;
+            padding: 0.75rem;
+            background-color: #f8f9fa;
+            border-radius: 5px;
+            border: 2px solid #ddd;
+            box-shadow: inset 0 0 10px rgba(0,0,0,0.1);
+        }
+
+        .section-title {
+            color: #34495e;
+            margin-bottom: 0.75rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid #3498db;
+            font-size: 1.2rem;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .links-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 0.75rem;
+        }
+
+        .link-card {
+            padding: 0.75rem;
+            background-color: #f0f0f0;
+            border-radius: 5px;
+            box-shadow: 
+                2px 2px 0 #999,
+                -2px -2px 0 #fff;
+            transition: transform 0.2s;
+            font-size: 0.9rem;
+            border: 2px solid #ccc;
+        }
+
+        .link-card:hover {
+            transform: translateY(-2px);
+            background-color: #e8e8e8;
+            box-shadow: 
+                3px 3px 0 #999,
+                -3px -3px 0 #fff;
+        }
+
+        .link-card a {
+            color: #3498db;
+            text-decoration: none;
+            display: block;
+            width: 100%;
+            font-weight: bold;
+        }
+
+        .link-card a:hover {
+            color: #2980b9;
+        }
+
+        .row {
+            display: flex;
+            gap: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .row .section {
+            flex: 1;
+            margin-bottom: 0;
+        }
+
+        .search-container {
+            text-align: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .search-container input {
+            width: 300px;
+            padding: 8px 12px;
+            border: 3px solid #333;
+            border-radius: 5px;
+            font-size: 0.9rem;
+            background-color: #f0f0f0;
+            box-shadow: 
+                inset 2px 2px 5px rgba(0,0,0,0.2),
+                2px 2px 0 #999,
+                -2px -2px 0 #fff;
+        }
+
+        .search-container input:focus {
+            outline: none;
+            border-color: #3498db;
+            box-shadow: 
+                inset 2px 2px 5px rgba(0,0,0,0.2),
+                0 0 5px rgba(52, 152, 219, 0.5);
+        }
+
+        @media (max-width: 768px) {
+            body {
+                padding: 0.5rem;
+            }
+            
+            .container {
+                padding: 1rem;
+            }
+
+            .row {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Rinterla Project Directory</h1>
+
+       
+
+        <!-- First Row: Development Environments and AWS Resources side by side -->
+        <div class="row">
+            <!-- Development Environments -->
+            <div class="section">
+                <h2 class="section-title">Development Environments</h2>
+                <div class="links-grid">
+                    <div class="link-card">
+                        <a href="#">Snowflake DEV</a>
+                    </div>
+                    <div class="link-card">
+                        <a href="#">Snowflake PROD</a>
+                    </div>
+                    <div class="link-card">
+                        <a href="#">Databricks DEV</a>
+                    </div>
+                    <div class="link-card">
+                        <a href="#">AutoSys DEV</a>
+                    </div>
+                    <div class="link-card">
+                        <a href="#">AutoSys PROD</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Cloud Resources -->
+            <div class="section">
+                <h2 class="section-title">AWS Resources</h2>
+                <div class="links-grid">
+                    <div class="link-card">
+                        <a href="#">AWS </a>
+                    </div>
+                    <div class="link-card">
+                        <a href="#">AWS </a>
+                    </div>
+                    <div class="link-card">
+                        <a href="#">AWS Databricks</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Second Row: S3 Buckets and Development Tools side by side -->
+        <div class="row">
+            <!-- S3 Buckets -->
+            <div class="section">
+                <h2 class="section-title">S3 Buckets</h2>
+                <div class="links-grid">
+                    <div class="link-card">
+                        <a href="google.com">Project 1 - </a>
+                    </div>
+                    <div class="link-card">
+                        <a href="#">Project 1 - </a>
+                    </div>
+                    <div class="link-card">
+                        <a href="#">Project 2 - Raw</a>
+                    </div>
+                    <div class="link-card">
+                        <a href="#">Project 2 - Processed</a>
+                    </div>
+                    <!-- Add more buckets as needed -->
+                </div>
+            </div>
+
+            <!-- Tools -->
+            <div class="section">
+                <h2 class="section-title">Development Tools</h2>
+                <div class="links-grid">
+                    <div class="link-card">
+                        <a href="#">GitHub</a>
+                    </div>
+                    <div class="link-card">
+                        <a href="#">Jira</a>
+                    </div>
+                    <div class="link-card">
+                        <a href="#">SailPoint</a>
+                    </div>
+                </div>
+            </div>
+
+            
+        </div>
+
+        <div class="row">
+
+             
+                <!-- S3 Buckets -->
+                <div class="section">
+                    <h2 class="section-title">S3 Buckets</h2>
+                    <div class="links-grid">
+                        <div class="link-card">
+                            <a href="google.com">Project 1 - Raw</a>
+                        </div>
+                        <div class="link-card">
+                            <a href="#">Project 1 - Processed</a>
+                        </div>
+                        <div class="link-card">
+                            <a href="#">Project 2 - Raw</a>
+                        </div>
+                        <div class="link-card">
+                            <a href="#">Project 2 - Processed</a>
+                        </div>
+                        <!-- Add more buckets as needed -->
+                    </div>
+                </div>
+    
+                <!-- Tools -->
+                <div class="section">
+                    <h2 class="section-title">Development Tools</h2>
+                    <div class="links-grid">
+                        <div class="link-card">
+                            <a href="#">GitHub</a>
+                        </div>
+                        <div class="link-card">
+                            <a href="#">Jira</a>
+                        </div>
+                        <div class="link-card">
+                            <a href="#">SailPoint</a>
+                        </div>
+                    </div>
+                </div>
+    
+                
+           
+        </div>
+            <!-- S3 Buckets -->
+            <div class="section">
+                <h2 class="section-title">S3 Buckets</h2>
+                <div class="links-grid">
+                    <div class="link-card">
+                        <a href="google.com">Project 1 - Raw</a>
+                    </div>
+                    <div class="link-card">
+                        <a href="#">Project 1 - Processed</a>
+                    </div>
+                    <div class="link-card">
+                        <a href="#">Project 2 - Raw</a>
+                    </div>
+                    <div class="link-card">
+                        <a href="#">Project 2 - Processed</a>
+                    </div>
+                    <!-- Add more buckets as needed -->
+                </div>
+            </div>
+
+            <!-- Tools -->
+            <div class="section">
+                <h2 class="section-title">Development Tools</h2>
+                <div class="links-grid">
+                    <div class="link-card">
+                        <a href="#">GitHub</a>
+                    </div>
+                    <div class="link-card">
+                        <a href="#">Jira</a>
+                    </div>
+                    <div class="link-card">
+                        <a href="#">SailPoint</a>
+                    </div>
+                </div>
+            </div>
+
+            
+        </div>
+    </div>
+</body>
