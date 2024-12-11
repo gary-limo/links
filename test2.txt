@@ -1,17 +1,9 @@
-WITH pattern_matches AS (
+WITH cleaned_queries AS (
     SELECT 
         query_text,
-        COUNT(CASE WHEN query_text LIKE '%scm.tbl%' AND query_text NOT LIKE '%scm.tbl_%' THEN 1 END) AS exact_match_count,
-        COUNT(CASE WHEN query_text LIKE '%scm.tbl_%' THEN 1 END) AS underscore_match_count
+        REGEXP_REPLACE(query_text, 'scm\.tbl_[a-zA-Z0-9]*', '') AS cleaned_text
     FROM your_table
-    WHERE query_text LIKE '%scm.tbl%' OR query_text LIKE '%scm.tbl_%'
-    GROUP BY query_text
 )
 SELECT *
-FROM pattern_matches
-WHERE 
-    -- Include records where there is an exact match for scm.tbl
-    (exact_match_count > 0) 
-    OR 
-    -- Include records where both scm.tbl and scm.tbl_ patterns exist
-    (exact_match_count > 0 AND underscore_match_count > 0);
+FROM cleaned_queries
+WHERE cleaned_text LIKE '%scm.tbl%';
