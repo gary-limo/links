@@ -1,22 +1,17 @@
-WITH RECURSIVE pattern_extract AS (
-    -- Split query_text into words and extract potential schema.table patterns
+WITH pattern_matches AS (
     SELECT 
-        REGEXP_SUBSTR(query_text, 'schema\\.table[_]?', 1, ROW_NUMBER() OVER (ORDER BY (SELECT NULL))) as pattern
-    FROM your_table  -- Replace with your actual table name
-    WHERE pattern IS NOT NULL
-    QUALIFY ROW_NUMBER() OVER (ORDER BY (SELECT NULL)) <= 
-            REGEXP_COUNT(query_text, 'schema\\.table[_]?')
+        query_text,
+        COUNT(CASE WHEN query_text LIKE '%scm.tbl%' AND query_text NOT LIKE '%scm.tbl_%' THEN 1 END) AS exact_match_count,
+        COUNT(CASE WHEN query_text LIKE '%scm.tbl_%' THEN 1 END) AS underscore_match_count
+    FROM your_table
+    WHERE query_text LIKE '%scm.tbl%' OR query_text LIKE '%scm.tbl_%'
+    GROUP BY query_text
 )
-SELECT DISTINCT 
-    pattern
-FROM pattern_extract p1
+SELECT *
+FROM pattern_matches
 WHERE 
-    -- Exclude patterns ending with underscore unless there's a matching pattern without underscore
-    (NOT ENDSWITH(pattern, '_') 
+    -- Include records where there is an exact match for scm.tbl
+    (exact_match_count > 0) 
     OR 
-    EXISTS (
-        SELECT 1 
-        FROM pattern_extract p2 
-        WHERE RTRIM(p1.pattern, '_') = p2.pattern
-    ))
-ORDER BY pattern;
+    -- Include records where both scm.tbl and scm.tbl_ patterns exist
+    (exact_match_count > 0 AND underscore_match_count > 0);
