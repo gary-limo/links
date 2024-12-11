@@ -1,11 +1,11 @@
 WITH RECURSIVE pattern_extract AS (
     -- Split query_text into words and extract potential schema.table patterns
     SELECT 
-        REGEXP_SUBSTR(query_text, '[A-Za-z0-9_]+\\.[A-Za-z0-9_]+', 1, ROW_NUMBER() OVER (ORDER BY (SELECT NULL))) as pattern
+        REGEXP_SUBSTR(query_text, 'schema\\.table[_]?', 1, ROW_NUMBER() OVER (ORDER BY (SELECT NULL))) as pattern
     FROM your_table  -- Replace with your actual table name
     WHERE pattern IS NOT NULL
     QUALIFY ROW_NUMBER() OVER (ORDER BY (SELECT NULL)) <= 
-            REGEXP_COUNT(query_text, '[A-Za-z0-9_]+\\.[A-Za-z0-9_]+')
+            REGEXP_COUNT(query_text, 'schema\\.table[_]?')
 )
 SELECT DISTINCT 
     pattern
