@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>F1 Leaderboard</title>
+    <link href="https://fonts.googleapis.com/css?family=Overpass+Mono|Oswald" rel="stylesheet">
+    <style>
+        /* CSS Section */
+        html {
+            --black: #000000;
+            --white: #ffffff;
+            --darkest: #101010;
+            --darker: #16171A;
+            --dark: #A3AFBF;
+            --medium: #DFE7EF;
+            --light: #CAD4E1;
+            --lighter: #F5F8FC;
+            --lightest: var(--white);
+            --primary: #7B16FF;
+            --primary-light: #DDD9FF;
+            --primary-trans: rgba(123,22,255,0.4);
+            --yellow: #FDCB6E;
+            --orange: #E17055;
+            --teal: #00CEC9;
+            --bg: var(--darkest);
+            --color: var(--lightest);
+            --surface: var(--darker);
+            font-size: 62.5%;
+            box-sizing: border-box;
+        }
+
+        *, *:before, *:after {
+            box-sizing: inherit;
+        }
+
+        html, body {
+            width: 100%;
+            height: 100%;
+        }
+
+        body {
+            background-color: var(--darkest);
+            padding-top: 3rem;
+            color: var(--color);
+            font-size: 1.6rem;
+            font-family: 'Overpass Mono', system-ui;
+        }
+
+        h1,h2,h3,h4,h5,h6 {
+            font-weight: 400;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-top: 0.8rem;
+            margin-bottom: 0.8rem;
+            font-family: 'Oswald', system-ui;
+        }
+
+        .l-wrapper {
+            width: 100%;
+            max-width: 960px;
+            margin: auto;
+            margin-top: 4rem;
+            padding: 1.6rem 1.6rem 3.2rem;
+        }
+
+        .l-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            grid-gap: 2rem;
+        }
+
+        .c-card {
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2),
+                        0 2px 6px rgba(0, 0, 0, 0.15);
+            background: var(--darker);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 0.8rem;
+            padding: 2rem;
+        }
+
+        .c-card:hover {
+            transform: translateY(-2px);
+            transition: transform 0.2s ease;
+            box-shadow: 0 12px 20px rgba(0, 0, 0, 0.25);
+        }
+
+        .c-card__header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .winners-container {
+            display: flex;
+            justify-content: space-around;
+            gap: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .winner-card {
+            flex: 1;
+            min-width: 200px;
+            padding: 1.6rem;
+            text-align: center;
+        }
+
+        .c-avatar {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            margin: 1rem auto;
+            display: block;
+        }
+
+        .c-place {
+            width: 40px;
+            height: 40px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto;
+            font-weight: bold;
+        }
+
+        .u-text--yellow { color: var(--yellow) !important; }
+        .u-text--teal { color: var(--teal) !important; }
+        .u-bg--yellow { background: var(--yellow) !important; }
+        .u-bg--teal { background: var(--teal) !important; }
+        .u-text--dark { color: var(--darkest) !important; }
+        .u-mt--16 { margin-top: 1.6rem; }
+        .u-mb--16 { margin-bottom: 1.6rem; }
+
+        @media screen and (max-width: 1200px) {
+            .l-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media screen and (max-width: 768px) {
+            .l-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .c-avatar-container {
+            position: relative;
+            width: 120px;
+            height: 120px;
+            margin: 1rem auto;
+            cursor: pointer;
+        }
+
+        .c-avatar-container:hover::before {
+            content: "Click to change image";
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.7);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            font-size: 1.2rem;
+            padding: 10px;
+        }
+
+        .file-input {
+            display: none;
+        }
+
+        .winners-container--three {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .winners-container--three .winner-card--first {
+            flex: 0 0 auto;
+        }
+
+        .winners-container--three .second-place-container {
+            display: flex;
+            gap: 1rem;
+            justify-content: space-around;
+        }
+
+        .winners-container--three .winner-card--second {
+            flex: 1;
+        }
+
+        .winners-container--three .c-avatar {
+            width: 100px;  /* Slightly smaller for second place winners */
+            height: 100px;
+        }
+
+        .winners-container--three .winner-card--second .c-avatar {
+            width: 80px;  /* Even smaller for shared second place */
+            height: 80px;
+        }
+    </style>
+</head>
+<body>
+    <div class="l-wrapper">
+        <div class="l-grid">
+            <!-- Category 1 -->
+            <div class="c-card">
+                <div class="c-card__header">
+                    <h3>Category 1</h3>
+                </div>
+                <div class="winners-container">
+                    <!-- First Place -->
+                    <div class="winner-card">
+                        <div class="u-mb--16">1st Place</div>
+                        <div class="c-place u-bg--yellow u-text--dark">1</div>
+                        <div class="c-avatar-container">
+                            <img class="c-avatar" src="${team[0].img}" data-index="0"/>
+                            <input type="file" class="file-input" accept="image/*">
+                        </div>
+                        <h3 class="u-mt--16">${team[0].name}</h3>
+                    </div>
+                    <!-- Second Place -->
+                    <div class="winner-card">
+                        <div class="u-mb--16">2nd Place</div>
+                        <div class="c-place u-bg--teal u-text--dark">2</div>
+                        <div class="c-avatar-container">
+                            <img class="c-avatar" src="${team[1].img}" data-index="1"/>
+                            <input type="file" class="file-input" accept="image/*">
+                        </div>
+                        <h3 class="u-mt--16">${team[1].name}</h3>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Category 2 -->
+            <div class="c-card">
+                <div class="c-card__header">
+                    <h3>Category 2</h3>
+                </div>
+                <div class="winners-container">
+                    <!-- First Place -->
+                    <div class="winner-card">
+                        <div class="u-mb--16">1st Place</div>
+                        <div class="c-place u-bg--yellow u-text--dark">1</div>
+                        <div class="c-avatar-container">
+                            <img class="c-avatar" src="${team[2].img}" data-index="2"/>
+                            <input type="file" class="file-input" accept="image/*">
+                        </div>
+                        <h3 class="u-mt--16">${team[2].name}</h3>
+                    </div>
+                    <!-- Second Place -->
+                    <div class="winner-card">
+                        <div class="u-mb--16">2nd Place</div>
+                        <div class="c-place u-bg--teal u-text--dark">2</div>
+                        <div class="c-avatar-container">
+                            <img class="c-avatar" src="${team[3].img}" data-index="3"/>
+                            <input type="file" class="file-input" accept="image/*">
+                        </div>
+                        <h3 class="u-mt--16">${team[3].name}</h3>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Category 3 -->
+            <div class="c-card">
+                <div class="c-card__header">
+                    <h3>Category 3</h3>
+                </div>
+                <div class="winners-container winners-container--three">
+                    <!-- First Place -->
+                    <div class="winner-card winner-card--first">
+                        <div class="u-mb--16">1st Place</div>
+                        <div class="c-place u-bg--yellow u-text--dark">1</div>
+                        <div class="c-avatar-container">
+                            <img class="c-avatar" src="${team[4].img}" data-index="4"/>
+                            <input type="file" class="file-input" accept="image/*">
+                        </div>
+                        <h3 class="u-mt--16">${team[4].name}</h3>
+                    </div>
+                    <!-- Second Place Container -->
+                    <div class="second-place-container">
+                        <!-- Second Place - First Winner -->
+                        <div class="winner-card winner-card--second">
+                            <div class="u-mb--16">2nd Place</div>
+                            <div class="c-place u-bg--teal u-text--dark">2</div>
+                            <div class="c-avatar-container">
+                                <img class="c-avatar" src="${team[5].img}" data-index="5"/>
+                                <input type="file" class="file-input" accept="image/*">
+                            </div>
+                            <h3 class="u-mt--16">${team[5].name}</h3>
+                        </div>
+                        <!-- Second Place - Second Winner -->
+                        <div class="winner-card winner-card--second">
+                            <div class="u-mb--16">2nd Place</div>
+                            <div class="c-place u-bg--teal u-text--dark">2</div>
+                            <div class="c-avatar-container">
+                                <img class="c-avatar" src="${team[6].img}" data-index="6"/>
+                                <input type="file" class="file-input" accept="image/*">
+                            </div>
+                            <h3 class="u-mt--16">${team[6].name}</h3>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const team = [
+            {
+                name: 'Lewis Hamilton',
+                img: 'https://www.formula1.com/content/dam/fom-website/drivers/L/LEWHAM01_Lewis_Hamilton/lewham01.png.transform/2col-retina/image.png',
+            },
+            {
+                name: 'Kimi Raikkonen',
+                img: 'https://www.formula1.com/content/dam/fom-website/drivers/K/KIMRAI01_Kimi_R%C3%A4ikk%C3%B6nen/kimrai01.png.transform/2col-retina/image.png',
+            },
+            {
+                name: 'Sebastian Vettel',
+                img: 'https://www.formula1.com/content/dam/fom-website/drivers/S/SEBVET01_Sebastian_Vettel/sebvet01.png.transform/2col-retina/image.png',
+            },
+            {
+                name: 'Max Verstappen',
+                img: 'https://www.formula1.com/content/dam/fom-website/drivers/M/MAXVER01_Max_Verstappen/maxver01.png.transform/2col-retina/image.png',
+            },
+            {
+                name: 'Lando Norris',
+                img: 'https://www.formula1.com/content/dam/fom-website/drivers/L/LANNOR01_Lando_Norris/lannor01.png.transform/2col-retina/image.png',
+            },
+            {
+                name: 'Charles Leclerc',
+                img: 'https://www.formula1.com/content/dam/fom-website/drivers/C/CHALEC01_Charles_Leclerc/chalec01.png.transform/2col-retina/image.png',
+            },
+            {
+                name: 'George Russell',
+                img: 'https://www.formula1.com/content/dam/fom-website/drivers/G/GEORUS01_George_Russell/georus01.png.transform/2col-retina/image.png',
+            }
+        ];
+
+        // Function to replace template literals with actual values
+        function renderContent() {
+            document.body.innerHTML = document.body.innerHTML.replace(/\${([^}]*)}/g, (match, p1) => {
+                return eval(p1);
+            });
+        }
+
+        // Add these new functions for image handling
+        function initializeImageUploads() {
+            const avatarContainers = document.querySelectorAll('.c-avatar-container');
+            
+            avatarContainers.forEach(container => {
+                const img = container.querySelector('.c-avatar');
+                const input = container.querySelector('.file-input');
+                
+                container.addEventListener('click', () => {
+                    input.click();
+                });
+
+                input.addEventListener('change', (e) => {
+                    const file = e.target.files[0];
+                    if (file) {
+                        const reader = new FileReader();
+                        reader.onload = (e) => {
+                            img.src = e.target.result;
+                            // Update the team array with new image
+                            const index = parseInt(img.dataset.index);
+                            team[index].img = e.target.result;
+                            // Optional: Save to localStorage
+                            saveToLocalStorage();
+                        };
+                        reader.readAsDataURL(file);
+                    }
+                });
+            });
+        }
+
+        function saveToLocalStorage() {
+            localStorage.setItem('teamData', JSON.stringify(team));
+        }
+
+        function loadFromLocalStorage() {
+            const savedData = localStorage.getItem('teamData');
+            if (savedData) {
+                team.splice(0, team.length, ...JSON.parse(savedData));
+            }
+        }
+
+        // Modified event listener to include new functionality
+        document.addEventListener('DOMContentLoaded', () => {
+            loadFromLocalStorage(); // Load any saved images
+            renderContent();
+            initializeImageUploads();
+        });
+    </script>
+</body>
+</html>
